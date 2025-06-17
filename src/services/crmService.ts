@@ -1,4 +1,3 @@
-
 interface OAuthTokenResponse {
   access_token: string;
   token_type: string;
@@ -34,8 +33,8 @@ interface FormSubmissionData {
 }
 
 class CRMService {
-  private readonly tokenEndpoint = 'https://dlleni.8xcrm.com/oauth/token';
-  private readonly leadEndpoint = 'https://dlleni.8xcrm.com/api/v1/lead_generation/web_form_routings/storeLead';
+  private readonly tokenEndpoint = 'https://damac.dlleni.com/oauth/token';
+  private readonly leadEndpoint = 'https://damac.dlleni.com/api/v1/lead_generation/web_form_routings/storeLead';
   private readonly credentials = {
     client_id: '2',
     client_secret: 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz',
