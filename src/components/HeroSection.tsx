@@ -16,7 +16,7 @@ export function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/lovable-uploads/c95cf502-8b80-4f94-b8dd-4f19a206c22a.png"
+          src="/lovable-uploads/e8b6e733-412d-470e-b835-f4b1f65f0e4e.png"
           alt="DAMAC Riverside Dubai South"
           className="w-full h-full object-cover"
         />
@@ -49,7 +49,7 @@ export function HeroSection() {
             <Button 
               variant="outline" 
               size="lg"
-              className="border-white text-white hover:bg-white hover:text-damac-navy px-8 py-4 text-lg transition-all duration-300"
+              className="border-2 border-white bg-transparent text-white hover:bg-white hover:text-damac-navy px-8 py-4 text-lg transition-all duration-300 font-semibold"
               onClick={() => document.getElementById('project')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {t.nav.project}

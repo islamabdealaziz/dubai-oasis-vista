@@ -12,16 +12,10 @@ export function Navigation() {
         <div className={`flex items-center justify-between h-16 ${isRTL ? 'flex-row-reverse' : ''}`}>
           <div className="flex items-center">
             <img 
-              src="https://damacproperties.com/images/damac-logo.svg" 
+              src="/lovable-uploads/4b404a76-0735-4f2e-9902-e597e7670677.png" 
               alt="DAMAC" 
-              className="h-8 w-auto"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                target.nextElementSibling?.classList.remove('hidden');
-              }}
+              className="h-12 w-auto"
             />
-            <span className="text-white font-bold text-xl hidden">DAMAC</span>
           </div>
           
           <div className={`hidden md:flex items-center space-x-8 ${isRTL ? 'space-x-reverse' : ''}`}>
