@@ -14,7 +14,7 @@ export function Navigation() {
             <img 
               src="/lovable-uploads/4b404a76-0735-4f2e-9902-e597e7670677.png" 
               alt="DAMAC" 
-              className="h-12 w-auto"
+              className="h-12 w-auto brightness-0 invert"
             />
           </div>
           
