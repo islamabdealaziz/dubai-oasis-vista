@@ -5,6 +5,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '../hooks/use-toast';
+import { crmService } from '../services/crmService';
 
 export function ContactForm() {
   const { t, isRTL } = useLanguage();
@@ -14,20 +15,54 @@ export function ContactForm() {
     phone: '',
     preference: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.name || !formData.phone || !formData.preference) {
+      toast({
+        title: isRTL ? "خطأ في النموذج" : "Form Error",
+        description: isRTL 
+          ? "يرجى ملء جميع الحقول المطلوبة" 
+          : "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
     console.log('Form submitted:', formData);
     
-    toast({
-      title: isRTL ? "تم إرسال الطلب بنجاح!" : "Request Submitted Successfully!",
-      description: isRTL 
-        ? "سنتواصل معك قريباً لترتيب دعوة VIP الخاصة بك" 
-        : "We'll contact you soon to arrange your VIP invitation",
-    });
+    try {
+      // Submit to CRM
+      await crmService.submitLead(formData);
 
-    // Reset form
-    setFormData({ name: '', phone: '', preference: '' });
+      // Show success message
+      toast({
+        title: isRTL ? "تم إرسال الطلب بنجاح!" : "Request Submitted Successfully!",
+        description: isRTL 
+          ? "سنتواصل معك قريباً لترتيب دعوة VIP الخاصة بك" 
+          : "We'll contact you soon to arrange your VIP invitation",
+      });
+
+      // Reset form
+      setFormData({ name: '', phone: '', preference: '' });
+
+    } catch (error) {
+      console.error('Submission error:', error);
+      
+      // Show error message
+      toast({
+        title: isRTL ? "خطأ في الإرسال" : "Submission Error",
+        description: isRTL 
+          ? "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى" 
+          : "There was an error submitting your request. Please try again",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -52,7 +87,7 @@ export function ContactForm() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                    {t.cta.form.name}
+                    {t.cta.form.name} *
                   </label>
                   <Input
                     type="text"
@@ -61,13 +96,14 @@ export function ContactForm() {
                     className={`bg-white/20 border-white/30 text-white placeholder:text-white/60 ${isRTL ? 'text-right' : 'text-left'}`}
                     placeholder={t.cta.form.name}
                     required
+                    disabled={isSubmitting}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   />
                 </div>
 
                 <div>
                   <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                    {t.cta.form.phone}
+                    {t.cta.form.phone} *
                   </label>
                   <Input
                     type="tel"
@@ -76,6 +112,7 @@ export function ContactForm() {
                     className={`bg-white/20 border-white/30 text-white placeholder:text-white/60 ${isRTL ? 'text-right' : 'text-left'}`}
                     placeholder={t.cta.form.phone}
                     required
+                    disabled={isSubmitting}
                     dir={isRTL ? 'rtl' : 'ltr'}
                   />
                 </div>
@@ -83,9 +120,13 @@ export function ContactForm() {
 
               <div>
                 <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                  {t.cta.form.preference}
+                  {t.cta.form.preference} *
                 </label>
-                <Select value={formData.preference} onValueChange={(value) => handleInputChange('preference', value)}>
+                <Select 
+                  value={formData.preference} 
+                  onValueChange={(value) => handleInputChange('preference', value)}
+                  disabled={isSubmitting}
+                >
                   <SelectTrigger className={`bg-white/20 border-white/30 text-white ${isRTL ? 'text-right' : 'text-left'}`}>
                     <SelectValue placeholder={t.cta.form.preference} />
                   </SelectTrigger>
@@ -109,9 +150,13 @@ export function ContactForm() {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105"
+                disabled={isSubmitting}
+                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
-                {t.cta.form.submit}
+                {isSubmitting 
+                  ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')
+                  : t.cta.form.submit
+                }
               </Button>
             </form>
 
