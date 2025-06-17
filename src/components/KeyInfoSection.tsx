@@ -76,7 +76,7 @@ export function KeyInfoSection() {
                 {isRTL ? 'قرب المطار' : 'Airport Proximity'}
               </h4>
               <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? '5 دقائق من مطار آل مكتوم الدولي' : '5 minutes from Al Maktoum International Airport'}
+                {isRTL ? '10 دقائق من مطار آل مكتوم الدولي' : '10 minutes from Al Maktoum International Airport'}
               </p>
             </div>
 
