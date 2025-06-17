@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -52,8 +53,7 @@ export function ProjectGallery() {
                 className="w-full h-full object-cover object-center transition-transform duration-500"
                 loading="lazy"
                 style={{ 
-                  imageRendering: 'high-quality',
-                  imageResolution: 'from-image'
+                  imageRendering: 'crisp-edges'
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
