@@ -27,12 +27,12 @@ export function HeroSection() {
       </div>
 
       {/* Content Container */}
-      <div className={`relative z-10 w-full pt-32 pb-16 px-4 sm:px-6 lg:px-8 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+      <div className={`relative z-10 w-full pt-32 pb-32 px-4 sm:px-6 lg:px-8 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="animate-fade-in text-center space-y-12">
             
             {/* Main Title */}
-            <div className="bg-black/30 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/20">
+            <div className="bg-black/40 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/30 shadow-2xl">
               <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
                 {isRTL ? 'تخيل 300،000 موظف' : 'Imagine 300,000 people'}
               </h1>
@@ -43,23 +43,27 @@ export function HeroSection() {
             </div>
 
             {/* Key Message Section */}
-            <div className="bg-damac-navy/50 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-damac-gold/40">
+            <div className="bg-damac-navy/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-damac-gold/50 shadow-2xl">
               <p className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-damac-gold font-bold mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
                 {t.hero.subtitle}
               </p>
             </div>
 
             {/* Combined Description Section */}
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/30">
-              <div className="space-y-4">
-                <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-semibold leading-relaxed ${isRTL ? 'text-center' : 'text-center'}`}>
-                  {isRTL ? 'DAMAC نازلة في جنوب دبي قرب المطار' : 'DAMAC is building in Dubai South, right near the airport'}
-                </p>
-                
-                <p className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-damac-gold font-bold leading-relaxed ${isRTL ? 'text-center' : 'text-center'}`}>
-                  {isRTL ? 'يعني إيجارات مش بتقف!' : 'which means rental demand never stops!'}
-                </p>
-              </div>
+            <div className="bg-white/15 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
+              <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-semibold leading-relaxed ${isRTL ? 'text-center' : 'text-center'}`}>
+                {isRTL ? (
+                  <>
+                    DAMAC نازلة في جنوب دبي قرب المطار{' '}
+                    <span className="text-damac-gold font-bold">يعني إيجارات مش بتقف!</span>
+                  </>
+                ) : (
+                  <>
+                    DAMAC is building in Dubai South, right near the airport{' '}
+                    <span className="text-damac-gold font-bold">which means rental demand never stops!</span>
+                  </>
+                )}
+              </p>
             </div>
 
             {/* CTA Buttons */}
@@ -84,8 +88,8 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        {/* Scroll Indicator - Moved further down */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce">
           <button 
             onClick={scrollToEvent} 
             className="text-damac-gold-light hover:text-damac-gold transition-colors p-4 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-lg"
