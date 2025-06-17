@@ -1,13 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useEffect } from 'react';
+import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
+import { Navigation } from '../components/Navigation';
+import { HeroSection } from '../components/HeroSection';
+import { EventSection } from '../components/EventSection';
+import { ProjectGallery } from '../components/ProjectGallery';
+import { KeyInfoSection } from '../components/KeyInfoSection';
+import { ContactForm } from '../components/ContactForm';
+import { Footer } from '../components/Footer';
+
+function IndexContent() {
+  const { isRTL } = useLanguage();
+
+  useEffect(() => {
+    // Update document direction based on language
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = isRTL ? 'ar' : 'en';
+  }, [isRTL]);
+
+  return (
+    <div className="min-h-screen">
+      <Navigation />
+      <HeroSection />
+      <EventSection />
+      <ProjectGallery />
+      <KeyInfoSection />
+      <ContactForm />
+      <Footer />
+    </div>
+  );
+}
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <LanguageProvider>
+      <IndexContent />
+    </LanguageProvider>
   );
 };
 
