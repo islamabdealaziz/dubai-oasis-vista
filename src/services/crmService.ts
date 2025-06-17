@@ -1,3 +1,4 @@
+
 interface OAuthTokenResponse {
   access_token: string;
   token_type: string;
@@ -50,17 +51,71 @@ class CRMService {
   // يتحقق إذا كان الموقع يستخدم دومين damac.dlleni.com
   private isCustomDomain(): boolean {
     const hostname = window.location.hostname;
-    console.log('Current hostname:', hostname);
-    return hostname === 'damac.dlleni.com';
+    console.log('Checking hostname for custom domain:', hostname);
+    const isCustom = hostname === 'damac.dlleni.com';
+    console.log('Is custom domain?', isCustom);
+    return isCustom;
+  }
+
+  async submitLead(formData: FormSubmissionData): Promise<boolean> {
+    console.log('=== STARTING LEAD SUBMISSION ===');
+    console.log('Form data received:', formData);
+    console.log('Current hostname:', window.location.hostname);
+    
+    // تحقق أولاً من الدومين قبل أي شيء آخر
+    if (this.isCustomDomain()) {
+      console.log('✅ CUSTOM DOMAIN DETECTED - Using alternative method directly');
+      return await this.submitViaAlternativeMethod(formData);
+    }
+    
+    console.log('🔄 Regular domain - attempting CRM API submission');
+    
+    try {
+      const { token, type } = await this.getAccessToken();
+      console.log('Got access token, proceeding with lead submission');
+
+      const leadData = this.transformFormDataToLead(formData);
+      console.log('Submitting lead to:', this.leadEndpoint);
+
+      const leadResponse = await fetch(this.leadEndpoint, {
+        method: 'POST',
+        headers: {
+          'Authorization': `${type} ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'User-Agent': 'DAMAC-Riverside/Web',
+        },
+        mode: 'cors',
+        body: JSON.stringify(leadData),
+      });
+
+      console.log('Lead submission response status:', leadResponse.status);
+
+      if (!leadResponse.ok) {
+        const errorText = await leadResponse.text();
+        console.error('Lead submission failed:', {
+          status: leadResponse.status,
+          statusText: leadResponse.statusText,
+          body: errorText
+        });
+        throw new Error(`Lead submission failed: ${leadResponse.status} - ${errorText}`);
+      }
+
+      const responseData = await leadResponse.json();
+      console.log('Lead submitted successfully:', responseData);
+      
+      return true;
+
+    } catch (error) {
+      console.error('❌ CRM API submission failed:', error);
+      console.log('🔄 Falling back to alternative method');
+      return await this.submitViaAlternativeMethod(formData);
+    }
   }
 
   private async getAccessToken(): Promise<{ token: string; type: string }> {
-    // تحقق من استخدام الدومين الخاص - إذا كان كذلك استخدم طريقة بديلة مباشرة
-    if (this.isCustomDomain()) {
-      console.log('Custom domain detected, skipping token request');
-      return { token: 'placeholder-token', type: 'Bearer' };
-    }
-
+    console.log('Getting access token...');
+    
     // Check if current token is still valid
     if (this.accessToken && this.tokenType && this.tokenExpiry && Date.now() < this.tokenExpiry) {
       console.log('Using existing access token');
@@ -208,7 +263,7 @@ class CRMService {
   }
 
   private async submitViaAlternativeMethod(formData: FormSubmissionData): Promise<boolean> {
-    console.log('Using alternative submission method for custom domain');
+    console.log('🔄 Using alternative submission method for DAMAC domain');
     
     const leadData = this.transformFormDataToLead(formData);
     console.log('Lead data for alternative submission:', leadData);
@@ -226,77 +281,14 @@ class CRMService {
       submissions.push(newSubmission);
       localStorage.setItem('damac_form_submissions', JSON.stringify(submissions));
       
-      console.log('Form data saved locally for DAMAC domain');
-      console.log(`Total submissions stored: ${submissions.length}`);
+      console.log('✅ Form data saved locally for DAMAC domain');
+      console.log(`📊 Total submissions stored: ${submissions.length}`);
       
       // Simulate successful submission
       return true;
     } catch (error) {
-      console.error('Error in alternative submission method:', error);
+      console.error('❌ Error in alternative submission method:', error);
       return false;
-    }
-  }
-
-  async submitLead(formData: FormSubmissionData): Promise<boolean> {
-    try {
-      console.log('Starting lead submission process with data:', formData);
-      console.log('Current domain:', window.location.hostname);
-      
-      // إذا كنا على الدومين المخصص، استخدم الطريقة البديلة مباشرة
-      if (this.isCustomDomain()) {
-        console.log('Custom domain detected, using alternative submission method directly');
-        return await this.submitViaAlternativeMethod(formData);
-      }
-
-      // Otherwise try normal API submission
-      try {
-        const { token, type } = await this.getAccessToken();
-        console.log('Got access token, proceeding with lead submission');
-
-        const leadData = this.transformFormDataToLead(formData);
-
-        console.log('Submitting lead to:', this.leadEndpoint);
-
-        const leadResponse = await fetch(this.leadEndpoint, {
-          method: 'POST',
-          headers: {
-            'Authorization': `${type} ${token}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'User-Agent': 'DAMAC-Riverside/Web',
-          },
-          mode: 'cors',
-          body: JSON.stringify(leadData),
-        });
-
-        console.log('Lead submission response status:', leadResponse.status);
-
-        if (!leadResponse.ok) {
-          const errorText = await leadResponse.text();
-          console.error('Lead submission failed:', {
-            status: leadResponse.status,
-            statusText: leadResponse.statusText,
-            body: errorText
-          });
-          throw new Error(`Lead submission failed: ${leadResponse.status} - ${errorText}`);
-        }
-
-        const responseData = await leadResponse.json();
-        console.log('Lead submitted successfully:', responseData);
-        
-        return true;
-
-      } catch (error: any) {
-        console.error('API submission failed, using fallback:', error);
-        return await this.submitViaAlternativeMethod(formData);
-      }
-
-    } catch (error) {
-      console.error('CRM submission error:', error);
-      
-      // Always use fallback for any error
-      console.log('Using fallback mechanism for form submission');
-      return await this.submitViaAlternativeMethod(formData);
     }
   }
 }
