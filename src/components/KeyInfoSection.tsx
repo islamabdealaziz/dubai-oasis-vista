@@ -96,7 +96,7 @@ export function KeyInfoSection() {
                 {isRTL ? 'استثمار مضمون' : 'Guaranteed ROI'}
               </h4>
               <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'عوائد سنوية تصل إلى 8%' : 'Annual returns up to 8%'}
+                {isRTL ? '12%' : 'Annual returns up to 12%'}
               </p>
             </div>
           </div>
