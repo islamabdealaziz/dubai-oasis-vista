@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Mail, Phone, Globe } from 'lucide-react';
@@ -16,6 +15,8 @@ export function Footer() {
               src="/lovable-uploads/4b404a76-0735-4f2e-9902-e597e7670677.png" 
               alt="DAMAC" 
               className="h-16 w-auto brightness-0 invert"
+              loading="lazy"
+              style={{ imageRendering: 'crisp-edges' }}
             />
             <p className="text-white/80 text-sm max-w-md">
               {isRTL 

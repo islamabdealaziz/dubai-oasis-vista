@@ -18,7 +18,10 @@ export function HeroSection() {
         <img
           src="/lovable-uploads/e8b6e733-412d-470e-b835-f4b1f65f0e4e.png"
           alt="DAMAC Riverside Dubai South"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          fetchPriority="high"
+          style={{ imageRendering: 'crisp-edges' }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-damac-navy/80 via-damac-navy/60 to-transparent"></div>
       </div>
