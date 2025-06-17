@@ -20,7 +20,10 @@ export function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form submission started:', formData);
+    
     if (!formData.name || !formData.phone || !formData.preference) {
+      console.log('Form validation failed - missing fields');
       toast({
         title: isRTL ? "خطأ في النموذج" : "Form Error",
         description: isRTL 
@@ -32,11 +35,12 @@ export function ContactForm() {
     }
 
     setIsSubmitting(true);
-    console.log('Form submitted:', formData);
+    console.log('Starting CRM submission with data:', formData);
     
     try {
       // Submit to CRM
-      await crmService.submitLead(formData);
+      const result = await crmService.submitLead(formData);
+      console.log('CRM submission successful:', result);
 
       // Show success message
       toast({
@@ -50,7 +54,11 @@ export function ContactForm() {
       setFormData({ name: '', phone: '', preference: '' });
 
     } catch (error) {
-      console.error('Submission error:', error);
+      console.error('CRM submission error:', error);
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
       
       // Show error message
       toast({
@@ -62,10 +70,12 @@ export function ContactForm() {
       });
     } finally {
       setIsSubmitting(false);
+      console.log('Form submission process completed');
     }
   };
 
   const handleInputChange = (field: string, value: string) => {
+    console.log(`Field ${field} changed to:`, value);
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
