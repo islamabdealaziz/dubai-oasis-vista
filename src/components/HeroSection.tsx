@@ -20,7 +20,7 @@ export function HeroSection() {
           alt="DAMAC Riverside Dubai South"
           className="w-full h-full object-cover object-center"
           loading="eager"
-          fetchpriority="high"
+          fetchPriority="high"
           style={{ imageRendering: 'crisp-edges' }}
         />
         <div className="absolute inset-0 bg-gradient-to-r from-damac-navy/85 via-damac-navy/70 to-damac-navy/40"></div>
@@ -32,11 +32,14 @@ export function HeroSection() {
           {/* Main Title */}
           <div className={`text-center mb-8 sm:mb-12 ${isRTL ? 'text-right' : 'text-left'}`}>
             <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-6 sm:mb-8 ${isRTL ? 'text-right' : 'text-left'}`}>
-              <span className="block mb-2 sm:mb-4">
+              <span className="block mb-3 sm:mb-4">
                 {isRTL ? 'تخيل 300،000 موظف' : 'Imagine 300,000 people'}
               </span>
-              <span className="block text-damac-gold">
+              <span className="block text-damac-gold mb-3 sm:mb-4">
                 {isRTL ? 'بيدور على مكان يأجر فيه' : 'looking for a place to rent.'}
+              </span>
+              <span className="block text-xl sm:text-2xl md:text-3xl lg:text-4xl text-damac-gold-light font-medium">
+                {isRTL ? 'في مطار آل مكتوم الدولي' : 'at Al Maktoum International Airport'}
               </span>
             </h1>
           </div>
@@ -52,14 +55,12 @@ export function HeroSection() {
 
           {/* Description with enhanced readability */}
           <div className={`mb-12 sm:mb-16 ${isRTL ? 'text-center' : 'text-center'}`}>
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
               <p className={`text-base sm:text-lg md:text-xl lg:text-2xl text-white font-medium leading-relaxed px-4 sm:px-6 ${isRTL ? 'text-right' : 'text-left'}`}>
-                <span className="block mb-2 sm:mb-3">
-                  {isRTL ? 'DAMAC نازلة في جنوب دبي قرب المطار،' : 'DAMAC is building in Dubai South, right near the airport'}
-                </span>
-                <span className="block text-damac-gold-light font-semibold">
-                  {isRTL ? 'يعني إيجارات مش بتقف' : '— which means rental demand never stops.'}
-                </span>
+                {isRTL ? 'DAMAC نازلة في جنوب دبي قرب المطار،' : 'DAMAC is building in Dubai South, right near the airport'}
+              </p>
+              <p className={`text-base sm:text-lg md:text-xl lg:text-2xl text-damac-gold-light font-semibold leading-relaxed px-4 sm:px-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+                {isRTL ? 'يعني إيجارات مش بتقف' : '— which means rental demand never stops.'}
               </p>
             </div>
           </div>
