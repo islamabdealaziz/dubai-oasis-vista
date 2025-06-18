@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '../hooks/use-toast';
 import { crmService } from '../services/crmService';
-import { MessageCircle } from 'lucide-react';
+import { FormFields } from './contact/FormFields';
+import { WhatsAppSection } from './contact/WhatsAppSection';
+import { ContactInfo } from './contact/ContactInfo';
 
 export function ContactForm() {
   const { t, isRTL } = useLanguage();
@@ -104,68 +104,13 @@ export function ContactForm() {
 
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                    {t.cta.form.name} *
-                  </label>
-                  <Input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    className={`bg-white/20 border-white/30 text-white placeholder:text-white/60 ${isRTL ? 'text-right' : 'text-left'}`}
-                    placeholder={t.cta.form.name}
-                    required
-                    disabled={isSubmitting}
-                    dir={isRTL ? 'rtl' : 'ltr'}
-                  />
-                </div>
-
-                <div>
-                  <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                    {t.cta.form.phone} *
-                  </label>
-                  <Input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className={`bg-white/20 border-white/30 text-white placeholder:text-white/60 ${isRTL ? 'text-right' : 'text-left'}`}
-                    placeholder={t.cta.form.phone}
-                    required
-                    disabled={isSubmitting}
-                    dir={isRTL ? 'rtl' : 'ltr'}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
-                  {t.cta.form.preference} *
-                </label>
-                <Select 
-                  value={formData.preference} 
-                  onValueChange={(value) => handleInputChange('preference', value)}
-                  disabled={isSubmitting}
-                >
-                  <SelectTrigger className={`bg-white/20 border-white/30 text-white ${isRTL ? 'text-right' : 'text-left'}`}>
-                    <SelectValue placeholder={t.cta.form.preference} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1bedroom">
-                      {isRTL ? '1 غرفة نوم' : '1 Bedroom'}
-                    </SelectItem>
-                    <SelectItem value="2bedroom">
-                      {isRTL ? '2 غرفة نوم' : '2 Bedroom'}
-                    </SelectItem>
-                    <SelectItem value="3bedroom">
-                      {isRTL ? '3 غرف نوم' : '3 Bedroom'}
-                    </SelectItem>
-                    <SelectItem value="penthouse">
-                      {isRTL ? 'بنتهاوس' : 'Penthouse'}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <FormFields
+                formData={formData}
+                isSubmitting={isSubmitting}
+                isRTL={isRTL}
+                t={t}
+                onInputChange={handleInputChange}
+              />
 
               {/* Submit Button */}
               <Button
@@ -180,45 +125,13 @@ export function ContactForm() {
                 }
               </Button>
 
-              {/* WhatsApp Button - Improved positioning */}
-              <div className="relative">
-                <div className={`flex items-center gap-3 ${isRTL ? 'justify-end' : 'justify-start'} mb-4`}>
-                  <div className="flex-1 h-px bg-white/20"></div>
-                  <span className="text-white/60 text-sm px-3">
-                    {isRTL ? 'أو تواصل معنا عبر' : 'Or contact us via'}
-                  </span>
-                  <div className="flex-1 h-px bg-white/20"></div>
-                </div>
-                
-                <Button
-                  type="button"
-                  size="lg"
-                  onClick={handleWhatsAppClick}
-                  className={`w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  <span>{isRTL ? 'تواصل عبر واتساب' : 'Contact via WhatsApp'}</span>
-                </Button>
-              </div>
+              <WhatsAppSection
+                isRTL={isRTL}
+                onWhatsAppClick={handleWhatsAppClick}
+              />
             </form>
 
-            {/* Contact Information */}
-            <div className="mt-8 pt-8 border-t border-white/20">
-              <div className="grid md:grid-cols-2 gap-6 text-center">
-                <div>
-                  <h4 className="text-white font-semibold mb-2">
-                    {isRTL ? 'اتصل بنا' : 'Call Us'}
-                  </h4>
-                  <p className="text-white/80">+201100830573</p>
-                </div>
-                <div>
-                  <h4 className="text-white font-semibold mb-2">
-                    {isRTL ? 'البريد الإلكتروني' : 'Email'}
-                  </h4>
-                  <p className="text-white/80">info@dlleni.com</p>
-                </div>
-              </div>
-            </div>
+            <ContactInfo isRTL={isRTL} />
           </div>
         </div>
       </div>
