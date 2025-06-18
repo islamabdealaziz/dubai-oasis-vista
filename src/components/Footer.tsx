@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Mail, Phone, Globe } from 'lucide-react';
@@ -70,7 +71,7 @@ export function Footer() {
         {/* Copyright */}
         <div className={`mt-12 pt-8 border-t border-white/20 text-center ${isRTL ? 'text-right' : 'text-left'}`}>
           <p className="text-white/60 text-sm">
-            © 2024 Dlleni. {isRTL ? "جميع الحقوق محفوظة." : "All rights reserved."}
+            © 2024 <a href="https://dlleni.com/" target="_blank" rel="noopener noreferrer" className="text-damac-gold hover:text-white transition-colors">Dlleni</a>. {isRTL ? "جميع الحقوق محفوظة." : "All rights reserved."}
           </p>
         </div>
       </div>
