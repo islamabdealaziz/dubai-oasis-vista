@@ -6,6 +6,7 @@ import { Input } from './ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { useToast } from '../hooks/use-toast';
 import { crmService } from '../services/crmService';
+import { MessageCircle } from 'lucide-react';
 
 export function ContactForm() {
   const { t, isRTL } = useLanguage();
@@ -77,6 +78,15 @@ export function ContactForm() {
   const handleInputChange = (field: string, value: string) => {
     console.log(`Field ${field} changed to:`, value);
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleWhatsAppClick = () => {
+    const message = isRTL 
+      ? "مرحباً، أنا مهتم بمشروع DAMAC Riverside وأريد المزيد من المعلومات"
+      : "Hello, I'm interested in DAMAC Riverside project and would like more information";
+    
+    const whatsappUrl = `https://wa.me/201100830573?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -157,17 +167,29 @@ export function ContactForm() {
                 </Select>
               </div>
 
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isSubmitting}
-                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                {isSubmitting 
-                  ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')
-                  : t.cta.form.submit
-                }
-              </Button>
+              <div className="flex gap-4">
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {isSubmitting 
+                    ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')
+                    : t.cta.form.submit
+                  }
+                </Button>
+
+                <Button
+                  type="button"
+                  size="lg"
+                  onClick={handleWhatsAppClick}
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  {isRTL ? 'واتساب' : 'WhatsApp'}
+                </Button>
+              </div>
             </form>
 
             {/* Contact Information */}
@@ -177,13 +199,13 @@ export function ContactForm() {
                   <h4 className="text-white font-semibold mb-2">
                     {isRTL ? 'اتصل بنا' : 'Call Us'}
                   </h4>
-                  <p className="text-white/80">+971 4 123 4567</p>
+                  <p className="text-white/80">+201100830573</p>
                 </div>
                 <div>
                   <h4 className="text-white font-semibold mb-2">
                     {isRTL ? 'البريد الإلكتروني' : 'Email'}
                   </h4>
-                  <p className="text-white/80">riverside@damac.com</p>
+                  <p className="text-white/80">info@dlleni.com</p>
                 </div>
               </div>
             </div>
