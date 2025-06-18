@@ -93,7 +93,7 @@ export function ContactForm() {
     <section id="contact" className={`py-20 bg-gradient-to-br from-damac-navy to-damac-navy-light ${isRTL ? 'font-cairo' : 'font-inter'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className={`text-center mb-12 ${isRTL ? 'text-right' : 'text-left'}`}>
+          <div className={`text-center mb-12 ${isRTL ? 'text-center' : 'text-center'}`}>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               {t.cta.title}
             </h2>
@@ -167,7 +167,7 @@ export function ContactForm() {
                 </Select>
               </div>
 
-              <div className="flex gap-4">
+              <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                 <Button
                   type="submit"
                   size="lg"
@@ -184,7 +184,7 @@ export function ContactForm() {
                   type="button"
                   size="lg"
                   onClick={handleWhatsAppClick}
-                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+                  className={`bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}
                 >
                   <MessageCircle className="w-5 h-5" />
                   {isRTL ? 'واتساب' : 'WhatsApp'}
@@ -194,7 +194,7 @@ export function ContactForm() {
 
             {/* Contact Information */}
             <div className="mt-8 pt-8 border-t border-white/20">
-              <div className="grid md:grid-cols-2 gap-6 text-center">
+              <div className={`grid md:grid-cols-2 gap-6 ${isRTL ? 'text-center' : 'text-center'}`}>
                 <div>
                   <h4 className="text-white font-semibold mb-2">
                     {isRTL ? 'اتصل بنا' : 'Call Us'}
