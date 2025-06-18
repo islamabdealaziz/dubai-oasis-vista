@@ -12,7 +12,7 @@ export class DataTransformer {
 
     // Clean and format phone number for international use
     let cleanPhone = formData.phone.replace(/[^\d+]/g, '');
-    let countryCode = 'AE'; // Default to UAE
+    let countryCode = 'EG'; // Default to Egypt since the number is Egyptian
     
     // If phone doesn't start with +, add + prefix
     if (!cleanPhone.startsWith('+')) {
@@ -58,7 +58,7 @@ export class DataTransformer {
       middle_name: '',
       last_name: lastName,
       full_name: formData.name,
-      description: `Interest in ${formData.preference} - DAMAC Riverside Dubai South`,
+      description: `Interest in ${formData.preference} - DAMAC Riverside Dubai South - VIP Registration`,
       company: 'DAMAC Properties',
       address: 'Dubai South, UAE',
       zip_code: '',
@@ -71,11 +71,11 @@ export class DataTransformer {
       ],
       social_accounts: [
         {
-          social_account: 'riverside@damac.com',
+          social_account: 'info@dlleni.com',
           account_type_id: 22
         }
       ],
-      form_id: 'DAMAC_RIVERSIDE_001'
+      form_id: 'DAMAC_RIVERSIDE_VIP_001' // Default form ID - will be overridden in the service
     };
 
     console.log('Transformed lead data:', leadData);

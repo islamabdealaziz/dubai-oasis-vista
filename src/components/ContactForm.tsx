@@ -93,7 +93,7 @@ export function ContactForm() {
     <section id="contact" className={`py-20 bg-gradient-to-br from-damac-navy to-damac-navy-light ${isRTL ? 'font-cairo' : 'font-inter'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className={`text-center mb-12 ${isRTL ? 'text-center' : 'text-center'}`}>
+          <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               {t.cta.title}
             </h2>
@@ -167,34 +167,44 @@ export function ContactForm() {
                 </Select>
               </div>
 
-              <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                <Button
-                  type="submit"
-                  size="lg"
-                  disabled={isSubmitting}
-                  className="flex-1 bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                >
-                  {isSubmitting 
-                    ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')
-                    : t.cta.form.submit
-                  }
-                </Button>
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                size="lg"
+                disabled={isSubmitting}
+                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              >
+                {isSubmitting 
+                  ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')
+                  : t.cta.form.submit
+                }
+              </Button>
 
+              {/* WhatsApp Button - Improved positioning */}
+              <div className="relative">
+                <div className={`flex items-center gap-3 ${isRTL ? 'justify-end' : 'justify-start'} mb-4`}>
+                  <div className="flex-1 h-px bg-white/20"></div>
+                  <span className="text-white/60 text-sm px-3">
+                    {isRTL ? 'أو تواصل معنا عبر' : 'Or contact us via'}
+                  </span>
+                  <div className="flex-1 h-px bg-white/20"></div>
+                </div>
+                
                 <Button
                   type="button"
                   size="lg"
                   onClick={handleWhatsAppClick}
-                  className={`bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}
+                  className={`w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}
                 >
                   <MessageCircle className="w-5 h-5" />
-                  {isRTL ? 'واتساب' : 'WhatsApp'}
+                  <span>{isRTL ? 'تواصل عبر واتساب' : 'Contact via WhatsApp'}</span>
                 </Button>
               </div>
             </form>
 
             {/* Contact Information */}
             <div className="mt-8 pt-8 border-t border-white/20">
-              <div className={`grid md:grid-cols-2 gap-6 ${isRTL ? 'text-center' : 'text-center'}`}>
+              <div className="grid md:grid-cols-2 gap-6 text-center">
                 <div>
                   <h4 className="text-white font-semibold mb-2">
                     {isRTL ? 'اتصل بنا' : 'Call Us'}
