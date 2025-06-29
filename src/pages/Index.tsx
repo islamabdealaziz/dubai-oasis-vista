@@ -3,8 +3,6 @@ import React, { useEffect } from 'react';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
-import { EventSection } from '../components/EventSection';
-import { ProjectGallery } from '../components/ProjectGallery';
 import { KeyInfoSection } from '../components/KeyInfoSection';
 import { ContactForm } from '../components/ContactForm';
 import { Footer } from '../components/Footer';
@@ -22,8 +20,6 @@ function IndexContent() {
     <div className="min-h-screen">
       <Navigation />
       <HeroSection />
-      <EventSection />
-      <ProjectGallery />
       <KeyInfoSection />
       <ContactForm />
       <Footer />

@@ -7,8 +7,16 @@ import { ArrowDown } from 'lucide-react';
 export function HeroSection() {
   const { t, isRTL } = useLanguage();
 
-  const scrollToEvent = () => {
-    document.getElementById('event')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToInfo = () => {
+    document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleBookInvitation = () => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleLearnMore = () => {
+    document.getElementById('info')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -33,36 +41,23 @@ export function HeroSection() {
             
             {/* Main Title */}
             <div className="bg-black/40 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/30 shadow-2xl">
-              <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
-                {isRTL ? 'تخيل 300،000 موظف' : 'Imagine 300,000 people'}
+              <h1 className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-damac-gold leading-tight mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
+                {isRTL ? 'لأول مرة في مصر!' : 'For the first time in Egypt!'}
               </h1>
               
-              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-damac-gold leading-tight ${isRTL ? 'text-center' : 'text-center'}`}>
-                {isRTL ? 'بيدور على مكان يأجر فيه' : 'looking for a place to rent'}
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
+                {isRTL ? 'DAMAC بتقدملك فرصة استثمار حقيقية من دبي...' : 'DAMAC offers you a real investment opportunity from Dubai...'}
               </h2>
+
+              <h3 className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-damac-gold font-bold ${isRTL ? 'text-center' : 'text-center'}`}>
+                {isRTL ? 'في معرض حصري بفندق Dusit – القاهرة الجديدة' : 'in an exclusive exhibition at Dusit Hotel – New Cairo'}
+              </h3>
             </div>
 
-            {/* Key Message Section */}
+            {/* Event Details */}
             <div className="bg-damac-navy/60 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-damac-gold/50 shadow-2xl">
-              <p className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-damac-gold font-bold mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
-                {t.hero.subtitle}
-              </p>
-            </div>
-
-            {/* Combined Description Section */}
-            <div className="bg-white/15 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-white/40 shadow-2xl">
-              <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl text-white font-semibold leading-relaxed ${isRTL ? 'text-center' : 'text-center'}`}>
-                {isRTL ? (
-                  <>
-                    DAMAC نازلة في جنوب دبي قرب المطار{' '}
-                    <span className="text-damac-gold font-bold">يعني إيجارات مش بتقف!</span>
-                  </>
-                ) : (
-                  <>
-                    DAMAC is building in Dubai South, right near the airport{' '}
-                    <span className="text-damac-gold font-bold">which means rental demand never stops!</span>
-                  </>
-                )}
+              <p className={`text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white font-bold ${isRTL ? 'text-center' : 'text-center'}`}>
+                {isRTL ? 'يومي 28 و29 يونيو من 10 الصبح لـ10 بالليل.' : 'June 28 & 29, from 10 AM to 10 PM.'}
               </p>
             </div>
 
@@ -71,27 +66,27 @@ export function HeroSection() {
               <Button 
                 size="lg" 
                 className="bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold px-10 py-5 text-lg sm:text-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto min-w-[250px] rounded-2xl shadow-2xl"
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={handleBookInvitation}
               >
-                {t.cta.form.submit}
+                {isRTL ? 'احجز دعوتك الآن' : 'Book Your Invitation Now'}
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
                 className="border-2 border-damac-gold bg-damac-gold/20 text-damac-gold hover:bg-damac-gold hover:text-damac-navy px-10 py-5 text-lg sm:text-xl transition-all duration-300 font-semibold w-full sm:w-auto min-w-[250px] rounded-2xl backdrop-blur-sm shadow-xl"
-                onClick={() => document.getElementById('project')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={handleLearnMore}
               >
-                {t.nav.project}
+                {isRTL ? 'اعرف التفاصيل' : 'Learn More'}
               </Button>
             </div>
 
           </div>
         </div>
 
-        {/* Scroll Indicator - Moved further down */}
+        {/* Scroll Indicator */}
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce">
           <button 
-            onClick={scrollToEvent} 
+            onClick={scrollToInfo} 
             className="text-damac-gold-light hover:text-damac-gold transition-colors p-4 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 shadow-lg"
           >
             <ArrowDown className="w-6 h-6" />
