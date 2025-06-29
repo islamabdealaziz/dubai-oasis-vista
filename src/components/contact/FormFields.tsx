@@ -77,7 +77,7 @@ export function FormFields({ formData, isSubmitting, isRTL, t, onInputChange }: 
                 {isRTL ? '1 غرفة نوم' : '1 Bedroom'}
               </div>
               <div className={`text-sm text-white/80 mt-1 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {isRTL ? 'سعر يبدأ من 1.2M AED' : 'Starting from 1.2M AED'}
+                {isRTL ? 'سعر يبدأ من 1.2 م درهم إماراتي' : 'Starting from 1.2M AED'}
               </div>
             </Label>
           </div>
@@ -96,7 +96,7 @@ export function FormFields({ formData, isSubmitting, isRTL, t, onInputChange }: 
                 {isRTL ? '2 غرفة نوم' : '2 Bedroom'}
               </div>
               <div className={`text-sm text-white/80 mt-1 ${isRTL ? 'text-right' : 'text-left'}`}>
-                {isRTL ? 'سعر يبدأ من 1.7M AED' : 'Starting from 1.7M AED'}
+                {isRTL ? 'سعر يبدأ من 1.7 م درهم إماراتي' : 'Starting from 1.7M AED'}
               </div>
             </Label>
           </div>
