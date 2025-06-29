@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { Input } from '../ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
 
 interface FormFieldsProps {
   formData: {
@@ -53,32 +54,45 @@ export function FormFields({ formData, isSubmitting, isRTL, t, onInputChange }: 
       </div>
 
       <div>
-        <label className={`block text-white font-medium mb-2 ${isRTL ? 'text-right' : 'text-left'}`}>
+        <label className={`block text-white font-medium mb-4 ${isRTL ? 'text-right' : 'text-left'}`}>
           {t.cta.form.preference} *
         </label>
-        <Select 
+        <RadioGroup 
           value={formData.preference} 
           onValueChange={(value) => onInputChange('preference', value)}
           disabled={isSubmitting}
+          className="space-y-4"
         >
-          <SelectTrigger className={`bg-white/20 border-white/30 text-white ${isRTL ? 'text-right' : 'text-left'}`}>
-            <SelectValue placeholder={t.cta.form.preference} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1bedroom">
-              {isRTL ? '1 غرفة نوم' : '1 Bedroom'}
-            </SelectItem>
-            <SelectItem value="2bedroom">
-              {isRTL ? '2 غرفة نوم' : '2 Bedroom'}
-            </SelectItem>
-            <SelectItem value="3bedroom">
-              {isRTL ? '3 غرف نوم' : '3 Bedroom'}
-            </SelectItem>
-            <SelectItem value="penthouse">
-              {isRTL ? 'بنتهاوس' : 'Penthouse'}
-            </SelectItem>
-          </SelectContent>
-        </Select>
+          <div className="flex items-center space-x-3 space-x-reverse bg-white/10 rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-colors">
+            <RadioGroupItem value="1bedroom" id="1bedroom" className="border-white text-white" />
+            <Label 
+              htmlFor="1bedroom" 
+              className={`flex-1 cursor-pointer text-white ${isRTL ? 'text-right' : 'text-left'}`}
+            >
+              <div className="font-medium">
+                {isRTL ? '1 غرفة نوم' : '1 Bedroom'}
+              </div>
+              <div className="text-sm text-white/80 mt-1">
+                {isRTL ? 'سعر يبدأ من 1.2M AED' : 'Starting from 1.2M AED'}
+              </div>
+            </Label>
+          </div>
+
+          <div className="flex items-center space-x-3 space-x-reverse bg-white/10 rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-colors">
+            <RadioGroupItem value="2bedroom" id="2bedroom" className="border-white text-white" />
+            <Label 
+              htmlFor="2bedroom" 
+              className={`flex-1 cursor-pointer text-white ${isRTL ? 'text-right' : 'text-left'}`}
+            >
+              <div className="font-medium">
+                {isRTL ? '2 غرفة نوم' : '2 Bedroom'}
+              </div>
+              <div className="text-sm text-white/80 mt-1">
+                {isRTL ? 'سعر يبدأ من 1.7M AED' : 'Starting from 1.7M AED'}
+              </div>
+            </Label>
+          </div>
+        </RadioGroup>
       </div>
     </>
   );
