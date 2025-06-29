@@ -16,7 +16,7 @@ interface CRMResponse {
 }
 
 class CRMApiService {
-  private baseUrl = 'https://dlleni.8xcrm.com';
+  private baseUrl = 'https://dlleni.8xcrm.com/oauth/token';
   private clientId = '2';
   private clientSecret = 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz';
   private username = 'support@8worx.com'; // You may need to update this
