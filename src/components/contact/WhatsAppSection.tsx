@@ -11,9 +11,9 @@ interface WhatsAppSectionProps {
 export function WhatsAppSection({ isRTL, onWhatsAppClick }: WhatsAppSectionProps) {
   return (
     <div className="relative">
-      <div className={`flex items-center gap-3 ${isRTL ? 'justify-end' : 'justify-start'} mb-4`}>
+      <div className={`flex items-center gap-3 mb-4`}>
         <div className="flex-1 h-px bg-white/20"></div>
-        <span className="text-white/60 text-sm px-3">
+        <span className={`text-white/60 text-sm px-3 ${isRTL ? 'text-right' : 'text-left'}`}>
           {isRTL ? 'أو تواصل معنا عبر' : 'Or contact us via'}
         </span>
         <div className="flex-1 h-px bg-white/20"></div>

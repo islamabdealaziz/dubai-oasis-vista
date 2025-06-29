@@ -90,19 +90,19 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className={`py-20 bg-gradient-to-br from-damac-navy to-damac-navy-light ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+    <section id="contact" className={`py-12 md:py-20 bg-gradient-to-br from-damac-navy to-damac-navy-light ${isRTL ? 'font-cairo' : 'font-inter'}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <div className={`text-center mb-8 md:mb-12 ${isRTL ? 'text-right' : 'text-left'}`}>
+            <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
               {t.cta.title}
             </h2>
-            <p className="text-xl text-white/80 mb-8">
+            <p className={`text-lg md:text-xl text-white/80 mb-6 md:mb-8 ${isRTL ? 'text-center' : 'text-center'}`}>
               {t.cta.subtitle}
             </p>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/20">
             <form onSubmit={handleSubmit} className="space-y-6">
               <FormFields
                 formData={formData}
@@ -117,7 +117,7 @@ export function ContactForm() {
                 type="submit"
                 size="lg"
                 disabled={isSubmitting}
-                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-4 text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-damac-gold hover:bg-damac-gold/90 text-damac-navy font-bold py-3 md:py-4 text-base md:text-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isSubmitting 
                   ? (isRTL ? 'جاري الإرسال...' : 'Submitting...')

@@ -8,18 +8,18 @@ interface ContactInfoProps {
 export function ContactInfo({ isRTL }: ContactInfoProps) {
   return (
     <div className="mt-8 pt-8 border-t border-white/20">
-      <div className="grid md:grid-cols-2 gap-6 text-center">
-        <div>
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
+        <div className={`text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
           <h4 className="text-white font-semibold mb-2">
             {isRTL ? 'اتصل بنا' : 'Call Us'}
           </h4>
-          <p className="text-white/80">+201100830573</p>
+          <p className="text-white/80" dir="ltr">+201100830573</p>
         </div>
-        <div>
+        <div className={`text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
           <h4 className="text-white font-semibold mb-2">
             {isRTL ? 'البريد الإلكتروني' : 'Email'}
           </h4>
-          <p className="text-white/80">info@dlleni.com</p>
+          <p className="text-white/80" dir="ltr">info@dlleni.com</p>
         </div>
       </div>
     </div>
