@@ -29,14 +29,14 @@ export function ProjectGallery() {
   };
 
   return (
-    <section id="project" className="py-20 bg-gray-50">
+    <section id="info" className="py-20 bg-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-16 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-            <h2 className={`text-4xl md:text-5xl font-bold text-damac-navy mb-6 ${isRTL ? 'text-right' : 'text-left'}`}>
+            <h2 className={`text-4xl md:text-5xl font-bold text-damac-navy mb-6 ${isRTL ? 'text-center' : 'text-center'}`}>
               {isRTL ? 'مشروع DAMAC Riverside' : 'DAMAC Riverside Project'}
             </h2>
-            <p className={`text-xl text-gray-600 max-w-3xl mx-auto ${isRTL ? 'text-right' : 'text-left'}`}>
+            <p className={`text-xl text-gray-600 max-w-3xl mx-auto ${isRTL ? 'text-center' : 'text-center'}`}>
               {isRTL 
                 ? 'اكتشف الحياة الفاخرة على ضفاف الماء في قلب دبي ساوث مع مرافق عالمية المستوى وتصميم معماري متطور'
                 : 'Discover luxury waterfront living in the heart of Dubai South with world-class amenities and sophisticated architectural design'
@@ -94,48 +94,60 @@ export function ProjectGallery() {
           </div>
 
           {/* Feature Highlights */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🏖️</span>
+                <span className="text-2xl">📍</span>
               </div>
               <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'واجهة مائية خلابة' : 'Stunning Waterfront'}
+                {isRTL ? 'الموقع' : 'Location'}
               </h3>
               <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
                 {isRTL 
-                  ? 'استمتع بإطلالات مذهلة على المياه الكريستالية والشواطئ الرملية البيضاء'
-                  : 'Enjoy breathtaking views of crystal waters and pristine sandy beaches'
+                  ? 'في قلب دبي ساوث قريب من مطار آل مكتوم'
+                  : 'In the heart of Dubai South near Al Maktoum Airport'
                 }
               </p>
             </div>
 
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🏊‍♀️</span>
+                <span className="text-2xl">💰</span>
               </div>
               <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'مرافق رياضية متنوعة' : 'Diverse Sports Facilities'}
+                {isRTL ? 'السعر' : 'Price'}
               </h3>
               <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
                 {isRTL 
-                  ? 'مسابح عائمة وملاعب رياضية ومرافق ترفيهية عالمية المستوى'
-                  : 'Floating pools, sports courts, and world-class recreational facilities'
+                  ? 'الأسعار تبدأ من 1.2 مليون درهم'
+                  : 'Prices start from AED 1.2 million'
                 }
               </p>
             </div>
 
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🏗️</span>
+                <span className="text-2xl">🏆</span>
               </div>
               <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'تصميم معماري متطور' : 'Modern Architecture'}
+                {isRTL ? 'المميزات' : 'Benefits'}
+              </h3>
+              <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+                {isRTL ? '0% ضريبة – عائد مرتفع' : '0% tax – High returns'}
+              </p>
+            </div>
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🛂</span>
+              </div>
+              <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+                {isRTL ? 'فيزا ذهبية' : 'Golden Visa'}
               </h3>
               <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
                 {isRTL 
-                  ? 'تصميمات معمارية عصرية تجمع بين الفخامة والوظائف العملية'
-                  : 'Contemporary architectural designs blending luxury with functionality'
+                  ? 'مؤهّل للحصول على الإقامة الذهبية'
+                  : 'Eligible for Golden Residence'
                 }
               </p>
             </div>
