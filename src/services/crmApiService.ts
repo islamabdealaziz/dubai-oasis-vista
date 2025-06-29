@@ -19,8 +19,8 @@ class CRMApiService {
   private baseUrl = 'https://dlleni.8xcrm.com/oauth/token';
   private clientId = '2';
   private clientSecret = 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz';
-  private username = 'support@8worx.com'; // You may need to update this
-  private password = '123456'; // You may need to update this
+  private username = 'info@dlleni.com'; // You may need to update this
+  private password = 'Dlleni@25'; // You may need to update this
   private accessToken: string | null = null;
   private tokenType: string | null = null;
   private tokenExpiry: number | null = null;
