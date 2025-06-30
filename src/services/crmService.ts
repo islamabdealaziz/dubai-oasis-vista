@@ -2,9 +2,10 @@
 import { FormSubmissionData } from '../types/crm';
 import { LocalSubmissionService } from './alternativeSubmissionService';
 import { crmApiService } from './crmApiService';
+import { DataTransformer } from '../utils/dataTransformer';
 
 class CRMService {
-  async submitLead(formData: FormSubmissionData): Promise<boolean> {
+  async submitLead(formData: { name: string; phone: string; preference: string }): Promise<boolean> {
     console.log('=== STARTING CRM FORM SUBMISSION ===');
     console.log('Form data received:', formData);
     console.log('Current hostname:', window.location.hostname);
@@ -14,9 +15,12 @@ class CRMService {
     await LocalSubmissionService.submitForm(formData);
     
     try {
-      // Submit to real CRM API with the new Form ID
+      // Transform form data to submission format
+      const submissionData = DataTransformer.transformFormDataToSubmissionData(formData);
+      
+      // Submit to real CRM API with the Form ID
       console.log('🚀 Submitting to CRM API...');
-      const result = await crmApiService.submitLead(formData, 12345689);
+      const result = await crmApiService.submitLead(submissionData, 12345689);
       
       if (result.success) {
         console.log('✅ CRM submission successful');

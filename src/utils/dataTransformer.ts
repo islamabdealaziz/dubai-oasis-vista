@@ -1,8 +1,8 @@
 import { FormSubmissionData, LeadData } from '../types/crm';
 
 export class DataTransformer {
-  static transformFormDataToLead(formData: FormSubmissionData): LeadData {
-    console.log('Transforming form data:', formData);
+  static transformFormDataToSubmissionData(formData: { name: string; phone: string; preference: string }): FormSubmissionData {
+    console.log('Transforming form data to submission data:', formData);
     
     // Extract first and last name from full name
     const nameParts = formData.name.trim().split(' ');
@@ -11,7 +11,7 @@ export class DataTransformer {
 
     // Clean and format phone number for international use
     let cleanPhone = formData.phone.replace(/[^\d+]/g, '');
-    let countryCode = 'EG'; // Default to Egypt since the number is Egyptian
+    let countryCode = 'EG'; // Default to Egypt
     
     // If phone doesn't start with +, add + prefix
     if (!cleanPhone.startsWith('+')) {
@@ -51,33 +51,54 @@ export class DataTransformer {
 
     console.log('Phone processed:', { original: formData.phone, cleaned: cleanPhone, countryCode });
 
-    const leadData: LeadData = {
+    const submissionData: FormSubmissionData = {
       title: 'Mr/Ms',
       first_name: firstName,
-      middle_name: '',
       last_name: lastName,
       full_name: formData.name,
       description: `Interest in ${formData.preference} - DAMAC Riverside Dubai South - VIP Registration`,
       company: 'DAMAC Properties',
       address: 'Dubai South, UAE',
-      zip_code: '',
-      birthdate: '',
+      source_id: 90,
       phones: [
         {
           phone: cleanPhone,
           country_code: countryCode
         }
       ],
+      // Keep original fields for backward compatibility
+      name: formData.name,
+      phone: formData.phone,
+      preference: formData.preference
+    };
+
+    console.log('Transformed submission data:', submissionData);
+    return submissionData;
+  }
+
+  static transformFormDataToLead(formData: { name: string; phone: string; preference: string }): LeadData {
+    const submissionData = this.transformFormDataToSubmissionData(formData);
+    
+    return {
+      title: submissionData.title,
+      first_name: submissionData.first_name,
+      middle_name: '',
+      last_name: submissionData.last_name,
+      full_name: submissionData.full_name,
+      description: submissionData.description,
+      company: submissionData.company,
+      address: submissionData.address,
+      zip_code: '',
+      birthdate: '',
+      phones: submissionData.phones,
       social_accounts: [
         {
           social_account: 'info@dlleni.com',
           account_type_id: 22
         }
       ],
-      form_id: 'DAMAC_RIVERSIDE_VIP_001' // Default form ID - will be overridden in the service
+      form_id: 'DAMAC_RIVERSIDE_VIP_001',
+      source_id: submissionData.source_id
     };
-
-    console.log('Transformed lead data:', leadData);
-    return leadData;
   }
 }

@@ -1,4 +1,3 @@
-
 import { FormSubmissionData, LeadData } from '../types/crm';
 import { DataTransformer } from '../utils/dataTransformer';
 
@@ -16,7 +15,7 @@ interface CRMResponse {
 }
 
 class CRMApiService {
-  private baseUrl = 'https://dlleni.8xcrm.com/oauth/token';
+  private baseUrl = 'https://dlleni.8xcrm.com';
   private clientId = '2';
   private clientSecret = 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz';
   private username = 'info@dlleni.com';
@@ -71,30 +70,27 @@ class CRMApiService {
     }
   }
 
-  async submitLead(formData: FormSubmissionData, formId: number = 12345689): Promise<CRMResponse> {
+  async submitLead(data: FormSubmissionData, formId: number): Promise<CRMResponse> {
     console.log('📤 Starting CRM lead submission');
-    console.log('Form data:', formData);
+    console.log('Form data:', data);
     console.log('Form ID:', formId);
 
     try {
       // Get access token
       const authHeader = await this.getAccessToken();
       
-      // Transform form data to lead data
-      const leadData = DataTransformer.transformFormDataToLead(formData);
-      
-      // Create the exact payload format as shown in the example
+      // Create payload combining formId with form data
       const payload = {
         form_id: formId,
-        title: leadData.title,
-        first_name: leadData.first_name,
-        last_name: leadData.last_name,
-        full_name: leadData.full_name,
-        description: leadData.description,
-        company: leadData.company,
-        address: leadData.address,
-        source_id: leadData.source_id,
-        phones: leadData.phones
+        title: data.title || 'Mr/Ms',
+        first_name: data.first_name,
+        last_name: data.last_name || '',
+        full_name: data.full_name,
+        description: data.description || `Interest in ${data.preference} - DAMAC Riverside Dubai South - VIP Registration`,
+        company: data.company || 'DAMAC Properties',
+        address: data.address || 'Dubai South, UAE',
+        source_id: data.source_id || 90,
+        phones: data.phones
       };
 
       console.log('Final payload to be sent:', payload);
@@ -135,7 +131,6 @@ class CRMApiService {
     }
   }
 
-  // Method to test connection
   async testConnection(): Promise<boolean> {
     try {
       await this.getAccessToken();

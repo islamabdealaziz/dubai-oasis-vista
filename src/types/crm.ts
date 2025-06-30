@@ -1,4 +1,3 @@
-
 export interface LeadData {
   title?: string;
   first_name: string;
@@ -23,6 +22,19 @@ export interface LeadData {
 }
 
 export interface FormSubmissionData {
+  title?: string;
+  first_name: string;
+  last_name?: string;
+  full_name: string;
+  description?: string;
+  company?: string;
+  address?: string;
+  source_id?: number;
+  phones: Array<{
+    phone: string;
+    country_code: string;
+  }>;
+  // Keep the original fields for backward compatibility
   name: string;
   phone: string;
   preference: string;
