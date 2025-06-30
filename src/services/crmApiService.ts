@@ -1,3 +1,4 @@
+
 import { FormSubmissionData, LeadData } from '../types/crm';
 import { DataTransformer } from '../utils/dataTransformer';
 
@@ -86,7 +87,7 @@ class CRMApiService {
         first_name: data.first_name,
         last_name: data.last_name || '',
         full_name: data.full_name,
-        description: data.description || `Interest in ${data.preference} - DAMAC Riverside Dubai South - VIP Registration`,
+        description: data.description || 'DAMAC Riverside Dubai South - VIP Registration',
         company: data.company || 'DAMAC Properties',
         address: data.address || 'Dubai South, UAE',
         source_id: data.source_id || 90,
