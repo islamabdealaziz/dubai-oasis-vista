@@ -18,7 +18,8 @@ export interface LeadData {
     social_account: string;
     account_type_id: number;
   }>;
-  form_id: string;
+  form_id?: string | number;
+  source_id?: number;
 }
 
 export interface FormSubmissionData {

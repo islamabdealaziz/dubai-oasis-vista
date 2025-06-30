@@ -16,11 +16,11 @@ interface CRMResponse {
 }
 
 class CRMApiService {
-  private baseUrl = 'https://dlleni.8xcrm.com/oauth/token';
+  private baseUrl = 'https://dlleni.8xcrm.com';
   private clientId = '2';
   private clientSecret = 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz';
-  private username = 'info@dlleni.com'; // You may need to update this
-  private password = 'Dlleni@25'; // You may need to update this
+  private username = 'info@dlleni.com';
+  private password = 'Dlleni@25';
   private accessToken: string | null = null;
   private tokenType: string | null = null;
   private tokenExpiry: number | null = null;
@@ -71,7 +71,7 @@ class CRMApiService {
     }
   }
 
-  async submitLead(formData: FormSubmissionData, formId: string = 'DAMAC_RIVERSIDE_VIP_001'): Promise<CRMResponse> {
+  async submitLead(formData: FormSubmissionData, formId: number = 12345689): Promise<CRMResponse> {
     console.log('📤 Starting CRM lead submission');
     console.log('Form data:', formData);
     console.log('Form ID:', formId);
@@ -82,9 +82,22 @@ class CRMApiService {
       
       // Transform form data to lead data
       const leadData = DataTransformer.transformFormDataToLead(formData);
-      leadData.form_id = formId;
+      
+      // Create the payload with the new format
+      const payload = {
+        form_id: formId,
+        title: leadData.title || 'Mr.',
+        first_name: leadData.first_name,
+        last_name: leadData.last_name,
+        full_name: leadData.full_name,
+        description: `Interested in ${formData.preference} - DAMAC Riverside Dubai South - VIP Registration`,
+        company: 'DAMAC Properties',
+        address: 'Dubai South, UAE',
+        source_id: 90, // Employee Referral as shown in the example
+        phones: leadData.phones
+      };
 
-      console.log('Transformed lead data:', leadData);
+      console.log('Transformed lead payload:', payload);
 
       // Submit lead to CRM
       const response = await fetch(`${this.baseUrl}/api/v1/lead_generation/web_form_routings/storeLead`, {
@@ -95,7 +108,7 @@ class CRMApiService {
           'User-Agent': 'DAMAC-Riverside/Web',
           'Authorization': authHeader
         },
-        body: JSON.stringify(leadData)
+        body: JSON.stringify(payload)
       });
 
       if (!response.ok) {
@@ -110,7 +123,7 @@ class CRMApiService {
       return {
         success: true,
         data: result,
-        message: 'Lead submitted successfully'
+        message: result.message || 'Lead submitted successfully'
       };
 
     } catch (error) {
