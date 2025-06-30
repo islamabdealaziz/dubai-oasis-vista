@@ -3,7 +3,7 @@ import { FormSubmissionData, LeadData } from '../types/crm';
 import { DataTransformer } from '../utils/dataTransformer';
 
 export class LocalSubmissionService {
-  static async submitForm(formData: FormSubmissionData): Promise<boolean> {
+  static async submitForm(formData: { name: string; phone: string; preference: string }): Promise<boolean> {
     console.log('📝 Saving form data locally');
     
     const leadData = DataTransformer.transformFormDataToLead(formData);

@@ -1,3 +1,4 @@
+
 export interface LeadData {
   title?: string;
   first_name: string;
@@ -34,8 +35,4 @@ export interface FormSubmissionData {
     phone: string;
     country_code: string;
   }>;
-  // Keep the original fields for backward compatibility
-  name: string;
-  phone: string;
-  preference: string;
 }

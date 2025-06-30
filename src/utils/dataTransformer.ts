@@ -1,3 +1,4 @@
+
 import { FormSubmissionData, LeadData } from '../types/crm';
 
 export class DataTransformer {
@@ -65,11 +66,7 @@ export class DataTransformer {
           phone: cleanPhone,
           country_code: countryCode
         }
-      ],
-      // Keep original fields for backward compatibility
-      name: formData.name,
-      phone: formData.phone,
-      preference: formData.preference
+      ]
     };
 
     console.log('Transformed submission data:', submissionData);
