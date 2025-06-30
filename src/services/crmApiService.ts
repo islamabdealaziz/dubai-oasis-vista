@@ -83,21 +83,21 @@ class CRMApiService {
       // Transform form data to lead data
       const leadData = DataTransformer.transformFormDataToLead(formData);
       
-      // Create the payload with the new format
+      // Create the exact payload format as shown in the example
       const payload = {
         form_id: formId,
-        title: leadData.title || 'Mr.',
+        title: leadData.title,
         first_name: leadData.first_name,
         last_name: leadData.last_name,
         full_name: leadData.full_name,
-        description: `Interested in ${formData.preference} - DAMAC Riverside Dubai South - VIP Registration`,
-        company: 'DAMAC Properties',
-        address: 'Dubai South, UAE',
-        source_id: 90, // Employee Referral as shown in the example
+        description: leadData.description,
+        company: leadData.company,
+        address: leadData.address,
+        source_id: leadData.source_id,
         phones: leadData.phones
       };
 
-      console.log('Transformed lead payload:', payload);
+      console.log('Final payload to be sent:', payload);
 
       // Submit lead to CRM
       const response = await fetch(`${this.baseUrl}/api/v1/lead_generation/web_form_routings/storeLead`, {

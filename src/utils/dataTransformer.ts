@@ -1,4 +1,3 @@
-
 import { FormSubmissionData, LeadData } from '../types/crm';
 
 export class DataTransformer {
