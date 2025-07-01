@@ -1,26 +1,8 @@
 
-import { FormSubmissionData, LeadData } from '../types/crm';
-import { DataTransformer } from '../utils/dataTransformer';
-
-interface TokenResponse {
-  token_type: string;
-  expires_in: number;
-  access_token: string;
-  refresh_token: string;
-}
-
-interface CRMResponse {
-  success: boolean;
-  data?: any;
-  message?: string;
-}
+import { FormSubmissionData, TokenResponse, CRMResponse } from '../types/crm';
+import { CRM_CONFIG, API_ENDPOINTS, DEFAULT_HEADERS } from '../config/crm';
 
 class CRMApiService {
-  private baseUrl = 'https://dlleni.8xcrm.com';
-  private clientId = '2';
-  private clientSecret = 'TuWXGb3azCnrsiZDf51t6eL4KPQARLUOuVCiVrDz';
-  private username = 'info@dlleni.com';
-  private password = 'Dlleni@25';
   private accessToken: string | null = null;
   private tokenType: string | null = null;
   private tokenExpiry: number | null = null;
@@ -35,19 +17,15 @@ class CRMApiService {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/oauth/token`, {
+      const response = await fetch(`${CRM_CONFIG.baseUrl}${API_ENDPOINTS.token}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'User-Agent': 'YourWebsite/Web'
-        },
+        headers: DEFAULT_HEADERS,
         body: JSON.stringify({
           grant_type: 'password',
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
-          username: this.username,
-          password: this.password
+          client_id: CRM_CONFIG.clientId,
+          client_secret: CRM_CONFIG.clientSecret,
+          username: CRM_CONFIG.username,
+          password: CRM_CONFIG.password
         })
       });
 
@@ -61,7 +39,7 @@ class CRMApiService {
       // Store token data
       this.accessToken = tokenData.access_token;
       this.tokenType = tokenData.token_type;
-      this.tokenExpiry = Date.now() + (tokenData.expires_in * 1000) - 60000; // Subtract 1 minute for safety
+      this.tokenExpiry = Date.now() + (tokenData.expires_in * 1000) - CRM_CONFIG.tokenSafetyMargin;
 
       return `${this.tokenType} ${this.accessToken}`;
 
@@ -71,7 +49,7 @@ class CRMApiService {
     }
   }
 
-  async submitLead(data: FormSubmissionData, formId: string | number = '000001'): Promise<CRMResponse> {
+  async submitLead(data: FormSubmissionData, formId: string | number = CRM_CONFIG.defaultFormId): Promise<CRMResponse> {
     console.log('📤 Starting CRM lead submission');
     console.log('Form data:', data);
     console.log('Form ID:', formId);
@@ -97,12 +75,10 @@ class CRMApiService {
       console.log('Final payload to be sent:', payload);
 
       // Submit lead to CRM
-      const response = await fetch(`${this.baseUrl}/api/v1/lead_generation/web_form_routings/storeLead`, {
+      const response = await fetch(`${CRM_CONFIG.baseUrl}${API_ENDPOINTS.storeLead}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'User-Agent': 'YourWebsite/Web',
+          ...DEFAULT_HEADERS,
           'Authorization': authHeader
         },
         body: JSON.stringify(payload)
