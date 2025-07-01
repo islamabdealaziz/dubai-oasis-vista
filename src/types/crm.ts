@@ -1,3 +1,15 @@
+export interface TokenResponse {
+  token_type: string;
+  expires_in: number;
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface CRMResponse {
+  success: boolean;
+  data?: any;
+  message?: string;
+}
 
 export interface LeadData {
   title?: string;
@@ -35,4 +47,11 @@ export interface FormSubmissionData {
     phone: string;
     country_code: string;
   }>;
+}
+
+export interface FormData {
+  name: string;
+  phone: string;
+  preference: string;
+  email?: string;
 }
