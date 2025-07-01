@@ -40,7 +40,7 @@ class CRMApiService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'User-Agent': 'DAMAC-Riverside/Web'
+          'User-Agent': 'YourWebsite/Web'
         },
         body: JSON.stringify({
           grant_type: 'password',
@@ -71,7 +71,7 @@ class CRMApiService {
     }
   }
 
-  async submitLead(data: FormSubmissionData, formId: number): Promise<CRMResponse> {
+  async submitLead(data: FormSubmissionData, formId: string | number = '000001'): Promise<CRMResponse> {
     console.log('📤 Starting CRM lead submission');
     console.log('Form data:', data);
     console.log('Form ID:', formId);
@@ -80,18 +80,18 @@ class CRMApiService {
       // Get access token
       const authHeader = await this.getAccessToken();
       
-      // Create payload combining formId with form data
+      // Create payload for 8X CRM format
       const payload = {
-        form_id: formId,
-        title: data.title || 'Mr/Ms',
+        title: data.title || 'Mr',
         first_name: data.first_name,
-        last_name: data.last_name || '',
         full_name: data.full_name,
-        description: data.description || 'DAMAC Riverside Dubai South - VIP Registration',
-        company: data.company || 'DAMAC Properties',
-        address: data.address || 'Dubai South, UAE',
-        source_id: data.source_id || 90,
-        phones: data.phones
+        company: data.company || '',
+        address: data.address || '',
+        zip_code: '',
+        birth_date: '',
+        phones: data.phones,
+        social_accounts: [],
+        form_id: formId.toString()
       };
 
       console.log('Final payload to be sent:', payload);
@@ -102,7 +102,7 @@ class CRMApiService {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'User-Agent': 'DAMAC-Riverside/Web',
+          'User-Agent': 'YourWebsite/Web',
           'Authorization': authHeader
         },
         body: JSON.stringify(payload)
