@@ -1,7 +1,6 @@
-
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, Play, Pause } from 'lucide-react';
 import { Button } from './ui/button';
 
 const projectImages = [
@@ -22,92 +21,129 @@ export function ProjectGallery() {
   const [isLoading, setIsLoading] = useState(true);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
   const [preloadedImages, setPreloadedImages] = useState<Set<number>>(new Set());
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Preload current and next images
+  // Enhanced preload function
   const preloadImage = useCallback((index: number) => {
-    if (preloadedImages.has(index)) return;
+    if (preloadedImages.has(index) || index < 0 || index >= projectImages.length) return;
     
     const img = new Image();
     img.onload = () => {
       setImageLoaded(prev => ({ ...prev, [index]: true }));
       setPreloadedImages(prev => new Set([...prev, index]));
+      if (index === currentIndex) {
+        setIsLoading(false);
+      }
+    };
+    img.onerror = () => {
+      console.error(`Failed to load image at index ${index}`);
+      setPreloadedImages(prev => new Set([...prev, index]));
+      if (index === currentIndex) {
+        setIsLoading(false);
+      }
     };
     img.src = projectImages[index];
-  }, [preloadedImages]);
+  }, [preloadedImages, currentIndex]);
 
-  // Preload initial images
+  // Initialize preloading
   useEffect(() => {
-    // Preload current image and next 2 images
+    // Preload first 3 images immediately
     for (let i = 0; i < Math.min(3, projectImages.length); i++) {
       preloadImage(i);
     }
   }, [preloadImage]);
 
-  // Preload next images when current index changes
+  // Preload adjacent images when current index changes
   useEffect(() => {
     const nextIndex = (currentIndex + 1) % projectImages.length;
     const prevIndex = (currentIndex - 1 + projectImages.length) % projectImages.length;
     
     preloadImage(nextIndex);
     preloadImage(prevIndex);
-  }, [currentIndex, preloadImage]);
+    
+    // Preload current image if not loaded
+    if (!imageLoaded[currentIndex]) {
+      setIsLoading(true);
+      preloadImage(currentIndex);
+    } else {
+      setIsLoading(false);
+    }
+  }, [currentIndex, preloadImage, imageLoaded]);
 
+  // Enhanced navigation functions
   const nextImage = useCallback(() => {
-    setCurrentIndex((prev) => {
-      const next = (prev + 1) % projectImages.length;
-      setIsLoading(!imageLoaded[next]);
-      return next;
-    });
-  }, [imageLoaded]);
+    setHasUserInteracted(true);
+    setCurrentIndex((prev) => (prev + 1) % projectImages.length);
+  }, []);
 
   const prevImage = useCallback(() => {
-    setCurrentIndex((prev) => {
-      const next = (prev - 1 + projectImages.length) % projectImages.length;
-      setIsLoading(!imageLoaded[next]);
-      return next;
-    });
-  }, [imageLoaded]);
+    setHasUserInteracted(true);
+    setCurrentIndex((prev) => (prev - 1 + projectImages.length) % projectImages.length);
+  }, []);
 
   const goToImage = useCallback((index: number) => {
+    setHasUserInteracted(true);
     setCurrentIndex(index);
-    setIsLoading(!imageLoaded[index]);
     preloadImage(index);
-  }, [imageLoaded, preloadImage]);
+  }, [preloadImage]);
 
-  // Handle keyboard navigation
+  // Auto-advance functionality
+  useEffect(() => {
+    if (isAutoPlaying && !hasUserInteracted) {
+      intervalRef.current = setInterval(() => {
+        if (imageLoaded[currentIndex]) {
+          nextImage();
+        }
+      }, 4000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isAutoPlaying, hasUserInteracted, currentIndex, imageLoaded, nextImage]);
+
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
-        prevImage();
+        event.preventDefault();
+        isRTL ? nextImage() : prevImage();
       } else if (event.key === 'ArrowRight') {
-        nextImage();
+        event.preventDefault();
+        isRTL ? prevImage() : nextImage();
+      } else if (event.key === ' ') {
+        event.preventDefault();
+        setIsAutoPlaying(prev => !prev);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextImage, prevImage]);
+  }, [nextImage, prevImage, isRTL]);
 
-  // Auto-advance gallery (optional)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (imageLoaded[currentIndex]) {
-        nextImage();
-      }
-    }, 5000); // Change image every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [currentIndex, imageLoaded, nextImage]);
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(prev => !prev);
+    setHasUserInteracted(true);
+  };
 
   return (
     <section id="gallery" className="py-12 bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className={`text-center mb-12 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-            <h2 className={`text-3xl md:text-4xl font-bold text-damac-navy mb-4 ${isRTL ? 'text-center' : 'text-center'}`}>
+            <h2 className={`text-3xl md:text-4xl font-bold text-damac-navy mb-4 text-center`}>
               {isRTL ? 'معرض مشروع DAMAC Riverside' : 'DAMAC Riverside Gallery'}
             </h2>
-            <p className={`text-lg text-gray-600 max-w-2xl mx-auto ${isRTL ? 'text-center' : 'text-center'}`}>
+            <p className={`text-lg text-gray-600 max-w-2xl mx-auto text-center`}>
               {isRTL 
                 ? 'استكشف الحياة الفاخرة على ضفاف الماء في قلب دبي ساوث'
                 : 'Explore luxury waterfront living in the heart of Dubai South'
@@ -140,9 +176,20 @@ export function ProjectGallery() {
               {/* Enhanced Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"></div>
               
-              {/* Image Counter */}
-              <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
-                {currentIndex + 1} / {projectImages.length}
+              {/* Image Counter & Controls */}
+              <div className="absolute top-4 right-4 flex items-center gap-3">
+                <div className="bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                  {currentIndex + 1} / {projectImages.length}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={toggleAutoPlay}
+                  className="bg-white/90 hover:bg-white border-none shadow-lg"
+                  aria-label={isAutoPlaying ? "Pause slideshow" : "Play slideshow"}
+                >
+                  {isAutoPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                </Button>
               </div>
             </div>
 
@@ -151,8 +198,9 @@ export function ProjectGallery() {
               variant="outline"
               size="icon"
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border-none shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
-              onClick={prevImage}
+              onClick={isRTL ? nextImage : prevImage}
               disabled={isLoading}
+              aria-label="Previous image"
             >
               <ChevronLeft className="w-6 h-6 text-damac-navy" />
             </Button>
@@ -160,15 +208,16 @@ export function ProjectGallery() {
               variant="outline"
               size="icon"
               className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white border-none shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110"
-              onClick={nextImage}
+              onClick={isRTL ? prevImage : nextImage}
               disabled={isLoading}
+              aria-label="Next image"
             >
               <ChevronRight className="w-6 h-6 text-damac-navy" />
             </Button>
           </div>
 
           {/* Enhanced Thumbnail Navigation */}
-          <div className="flex justify-center space-x-3 mb-12 overflow-x-auto pb-2">
+          <div className="flex justify-center space-x-3 mb-12 overflow-x-auto pb-2" dir="ltr">
             {projectImages.map((image, index) => (
               <button
                 key={index}
@@ -178,6 +227,7 @@ export function ProjectGallery() {
                     ? 'border-damac-gold scale-110 shadow-lg' 
                     : 'border-transparent hover:border-gray-300 hover:scale-105'
                 }`}
+                aria-label={`View image ${index + 1}`}
               >
                 <img
                   src={image}
@@ -191,62 +241,46 @@ export function ProjectGallery() {
 
           {/* Enhanced Key Features Grid */}
           <div className="grid md:grid-cols-4 gap-6">
-            <div className="group text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="w-16 h-16 bg-gradient-to-br from-damac-gold/20 to-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl">📍</span>
-              </div>
-              <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'الموقع' : 'Location'}
-              </h3>
-              <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL 
+            {[
+              {
+                icon: '📍',
+                title: isRTL ? 'الموقع' : 'Location',
+                description: isRTL 
                   ? 'في قلب دبي ساوث قريب من مطار آل مكتوم'
                   : 'Heart of Dubai South near Al Maktoum Airport'
-                }
-              </p>
-            </div>
-
-            <div className="group text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="w-16 h-16 bg-gradient-to-br from-damac-gold/20 to-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl">💰</span>
-              </div>
-              <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'السعر' : 'Price'}
-              </h3>
-              <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL 
+              },
+              {
+                icon: '💰',
+                title: isRTL ? 'السعر' : 'Price',
+                description: isRTL 
                   ? 'الأسعار تبدأ من 1.2 مليون درهم'
                   : 'Starting from AED 1.2 million'
-                }
-              </p>
-            </div>
-
-            <div className="group text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="w-16 h-16 bg-gradient-to-br from-damac-gold/20 to-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl">🏆</span>
-              </div>
-              <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'المميزات' : 'Benefits'}
-              </h3>
-              <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? '0% ضريبة – عائد مرتفع' : '0% tax – High returns'}
-              </p>
-            </div>
-
-            <div className="group text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="w-16 h-16 bg-gradient-to-br from-damac-gold/20 to-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl">🛂</span>
-              </div>
-              <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL ? 'فيزا ذهبية' : 'Golden Visa'}
-              </h3>
-              <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
-                {isRTL 
+              },
+              {
+                icon: '🏆',
+                title: isRTL ? 'المميزات' : 'Benefits',
+                description: isRTL ? '0% ضريبة – عائد مرتفع' : '0% tax – High returns'
+              },
+              {
+                icon: '🛂',
+                title: isRTL ? 'فيزا ذهبية' : 'Golden Visa',
+                description: isRTL 
                   ? 'مؤهّل للحصول على الإقامة الذهبية'
                   : 'Eligible for Golden Residence'
-                }
-              </p>
-            </div>
+              }
+            ].map((feature, index) => (
+              <div key={index} className="group text-center p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="w-16 h-16 bg-gradient-to-br from-damac-gold/20 to-damac-gold/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-2xl">{feature.icon}</span>
+                </div>
+                <h3 className={`text-xl font-semibold text-damac-navy mb-2 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+                  {feature.title}
+                </h3>
+                <p className={`text-gray-600 ${isRTL ? 'font-cairo' : 'font-inter'}`}>
+                  {feature.description}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
