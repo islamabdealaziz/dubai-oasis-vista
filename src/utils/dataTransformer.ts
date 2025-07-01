@@ -1,5 +1,6 @@
-
 import { FormSubmissionData, LeadData } from '../types/crm';
+import { PhoneUtils } from './phoneUtils';
+import { CRM_CONFIG } from '../config/crm';
 
 export class DataTransformer {
   static transformFormDataToSubmissionData(formData: { name: string; phone: string; preference: string }): FormSubmissionData {
@@ -9,49 +10,10 @@ export class DataTransformer {
     const nameParts = formData.name.trim().split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-
-    // Clean and format phone number for international use
-    let cleanPhone = formData.phone.replace(/[^\d+]/g, '');
-    let countryCode = 'EG'; // Default to Egypt
     
-    // If phone doesn't start with +, add + prefix
-    if (!cleanPhone.startsWith('+')) {
-      cleanPhone = '+' + cleanPhone;
-    }
+    // Process phone number using PhoneUtils
+    const phoneResult = PhoneUtils.processPhone(formData.phone);
     
-    // Detect country based on phone prefix
-    if (cleanPhone.startsWith('+20')) {
-      countryCode = 'EG'; // Egypt
-    } else if (cleanPhone.startsWith('+971')) {
-      countryCode = 'AE'; // UAE
-    } else if (cleanPhone.startsWith('+966')) {
-      countryCode = 'SA'; // Saudi Arabia
-    } else if (cleanPhone.startsWith('+1')) {
-      countryCode = 'US'; // USA/Canada
-    } else if (cleanPhone.startsWith('+44')) {
-      countryCode = 'GB'; // UK
-    } else if (cleanPhone.startsWith('+33')) {
-      countryCode = 'FR'; // France
-    } else if (cleanPhone.startsWith('+49')) {
-      countryCode = 'DE'; // Germany
-    } else if (cleanPhone.startsWith('+91')) {
-      countryCode = 'IN'; // India
-    } else if (cleanPhone.startsWith('+86')) {
-      countryCode = 'CN'; // China
-    } else if (cleanPhone.startsWith('+81')) {
-      countryCode = 'JP'; // Japan
-    } else if (cleanPhone.startsWith('+82')) {
-      countryCode = 'KR'; // South Korea
-    } else if (cleanPhone.startsWith('+7')) {
-      countryCode = 'RU'; // Russia
-    } else if (cleanPhone.startsWith('+55')) {
-      countryCode = 'BR'; // Brazil
-    } else if (cleanPhone.startsWith('+61')) {
-      countryCode = 'AU'; // Australia
-    }
-
-    console.log('Phone processed:', { original: formData.phone, cleaned: cleanPhone, countryCode });
-
     const submissionData: FormSubmissionData = {
       title: 'Mr/Ms',
       first_name: firstName,
@@ -60,19 +22,19 @@ export class DataTransformer {
       description: `Interest in ${formData.preference} - DAMAC Riverside Dubai South - VIP Registration`,
       company: 'DAMAC Properties',
       address: 'Dubai South, UAE',
-      source_id: 90,
+      source_id: CRM_CONFIG.defaultSourceId,
       phones: [
         {
-          phone: cleanPhone,
-          country_code: countryCode
+          phone: phoneResult.cleanPhone,
+          country_code: phoneResult.countryCode
         }
       ]
     };
-
+    
     console.log('Transformed submission data:', submissionData);
     return submissionData;
   }
-
+  
   static transformFormDataToLead(formData: { name: string; phone: string; preference: string }): LeadData {
     const submissionData = this.transformFormDataToSubmissionData(formData);
     
@@ -94,7 +56,7 @@ export class DataTransformer {
           account_type_id: 22
         }
       ],
-      form_id: '123456789',
+      form_id: CRM_CONFIG.defaultFormId, // ✅ Fixed: Now uses consistent form_id
       source_id: submissionData.source_id
     };
   }
